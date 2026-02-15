@@ -8,8 +8,6 @@ RUN apk add --no-cache curl tar
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x kubectl
 RUN curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 && chmod +x argocd
 RUN curl -sL https://github.com/rockit-bootcamp/slack-cli/releases/latest/download/slack-cli-linux-amd64 -o slack-cli && chmod +x slack-cli
-RUN curl -L https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.135.0/vmctl-linux-amd64-v1.135.0.tar.gz | tar -xz && mv vmctl-prod vmctl
-RUN curl -fSL https://github.com/grafana/grizzly/releases/latest/download/grr-linux-amd64 -o grr && chmod +x grr
 RUN curl -L https://github.com/profclems/glab/releases/download/v1.53.0/glab_1.53.0_linux_amd64.tar.gz | tar -xz && mv bin/glab .
 
 
