@@ -14,6 +14,7 @@ RUN apk add --no-cache \
     jq \
     nodejs \
     kubectl \
+    helm \
     glab \
     npm
 
