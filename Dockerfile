@@ -26,6 +26,8 @@ RUN npm install -g @termly-dev/cli opencode-mobile \
 RUN curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 && chmod +x argocd && mv argocd /usr/local/bin/argocd
 RUN curl -sL https://github.com/rockit-bootcamp/slack-cli/releases/latest/download/slack-cli-linux-amd64 -o slack-cli && chmod +x slack-cli && mv slack-cli /usr/local/bin/slack-cli
 
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
 # Create useful aliases for faster work in Kubernetes
 RUN echo 'alias k="kubectl"' >> /etc/profile.d/aliases.sh && \
     echo 'alias ctx="kubectl config use-context"' >> /etc/profile.d/aliases.sh && \
