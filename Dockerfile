@@ -2,23 +2,16 @@
 FROM alpine:latest AS builder
 RUN apk add --no-cache curl tar
 
-# Download kubectl
+
+
+# Download some tools
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x kubectl
-
-# Download ArgoCD CLI
 RUN curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 && chmod +x argocd
-
-# Download Slack-cli
 RUN curl -sL https://github.com/rockit-bootcamp/slack-cli/releases/latest/download/slack-cli-linux-amd64 -o slack-cli && chmod +x slack-cli
-
-# Download VictoriaMetrics troubleshooting tool
 RUN curl -L https://github.com/VictoriaMetrics/VictoriaMetrics/releases/download/v1.135.0/vmctl-linux-amd64-v1.135.0.tar.gz | tar -xz && mv vmctl-prod vmctl
-
-# Download Grafana Grizzly
 RUN curl -fSL https://github.com/grafana/grizzly/releases/latest/download/grr-linux-amd64 -o grr && chmod +x grr
-
-# Download GitLab CLI
 RUN curl -L https://github.com/profclems/glab/releases/download/v1.53.0/glab_1.53.0_linux_amd64.tar.gz | tar -xz && mv bin/glab .
+
 
 # --- STAGE 2: Final Image ---
 FROM ghcr.io/anomalyco/opencode:latest
