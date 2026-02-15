@@ -1,17 +1,3 @@
-# --- STAGE 1: Builder (Download tools) ---
-FROM alpine:latest AS builder
-RUN apk add --no-cache curl tar
-
-
-
-# Download some tools
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x kubectl
-RUN curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 && chmod +x argocd
-RUN curl -sL https://github.com/rockit-bootcamp/slack-cli/releases/latest/download/slack-cli-linux-amd64 -o slack-cli && chmod +x slack-cli
-RUN curl -L https://github.com/profclems/glab/releases/download/v1.53.0/glab_1.53.0_linux_amd64.tar.gz | tar -xz && mv bin/glab .
-
-
-# --- STAGE 2: Final Image ---
 FROM ghcr.io/anomalyco/opencode:latest
 
 # Switch to root to install packages
@@ -27,19 +13,17 @@ RUN apk add --no-cache \
     ca-certificates \
     jq \
     nodejs \
+    kubectl \
+    glab \
     npm
-
-# Copy all tools from the builder stage
-COPY --from=builder /kubectl /usr/local/bin/
-COPY --from=builder /argocd /usr/local/bin/
-COPY --from=builder /slack-cli /usr/local/bin/
-COPY --from=builder /vmctl /usr/local/bin/
-COPY --from=builder /grr /usr/local/bin/
-COPY --from=builder /glab /usr/local/bin/
 
 # Install mobile plugins globally
 RUN npm install -g @termly-dev/cli opencode-mobile \
     && npm cache clean --force
+
+# Download some tools
+RUN curl -sSL -o argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64 && chmod +x argocd && mv argocd /usr/local/bin/argocd
+RUN curl -sL https://github.com/rockit-bootcamp/slack-cli/releases/latest/download/slack-cli-linux-amd64 -o slack-cli && chmod +x slack-cli && mv slack-cli /usr/local/bin/slack-cli
 
 # Create useful aliases for faster work in Kubernetes
 RUN echo 'alias k="kubectl"' >> /etc/profile.d/aliases.sh && \
